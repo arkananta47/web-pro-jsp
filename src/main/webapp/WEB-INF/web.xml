@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app 
+    xmlns="https://jakarta.ee/xml/ns/jakartaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+    version="5.0">
+
+    <!-- Mahasiswa Servlet -->
+    <servlet>
+        <servlet-name>MahasiswaServlet</servlet-name>
+        <servlet-class>com.example.servlet.MahasiswaServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>MahasiswaServlet</servlet-name>
+        <url-pattern>/mahasiswa-list</url-pattern>
+        <url-pattern>/mahasiswa-new</url-pattern>
+        <url-pattern>/mahasiswa-insert</url-pattern>
+        <url-pattern>/mahasiswa-edit</url-pattern>
+        <url-pattern>/mahasiswa-update</url-pattern>
+        <url-pattern>/mahasiswa-delete</url-pattern>
+    </servlet-mapping>
+
+</web-app>
