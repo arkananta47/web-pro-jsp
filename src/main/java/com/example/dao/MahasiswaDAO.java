@@ -13,18 +13,29 @@ public class MahasiswaDAO {
     public MahasiswaDAO() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // --- UPDATE KONEKSI: MENGAMBIL DATA DARI RAILWAY LANGSUNG ---
+            String dbHost = System.getenv("MYSQLHOST");
+            String dbPort = System.getenv("MYSQLPORT");
+            String dbUser = System.getenv("MYSQLUSER");
+            String dbPass = System.getenv("MYSQLPASSWORD");
+            String dbName = System.getenv("MYSQLDATABASE");
+
+            // Jaga-jaga kalau sedang dijalankan di Laptop (Localhost) agar tidak error
+            if (dbHost == null) {
+                dbHost = "localhost";
+                dbPort = "3306";
+                dbUser = "root";
+                dbPass = ""; // Isi password laptop Anda jika perlu
+                dbName = "siakad";
+            }
+
+            // Setting tambahan agar koneksi lancar (matikan SSL & izinkan public key)
+            String url = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName + "?allowPublicKeyRetrieval=true&useSSL=false";
+
+            conn = DriverManager.getConnection(url, dbUser, dbPass);
             
-            // KONEKSI KE DATABASE RAILWAY
-            // Kita ganti 'localhost' dengan 'mysql.railway.internal'
-            // Kita ganti nama database 'siakad' dengan 'railway' (sesuai screenshot)
-            conn = DriverManager.getConnection(
-                "jdbc:mysql://mysql.railway.internal:3306/railway", 
-                "root", 
-                "1FliGvgmuazJpgdjiIGWZZSnGKmGhYTY"
-            );
-            
-            // --- KODE TAMBAHAN: OTOMATIS BUAT TABEL ---
-            // Ini agar Anda tidak perlu repot setting SQL manual
+            // --- BUAT TABEL OTOMATIS ---
             String sqlCreate = "CREATE TABLE IF NOT EXISTS mahasiswa ("
                     + "nim VARCHAR(20) PRIMARY KEY, "
                     + "nama VARCHAR(100), "
@@ -35,10 +46,12 @@ public class MahasiswaDAO {
                     + ")";
             Statement stmt = conn.createStatement();
             stmt.execute(sqlCreate);
-            // -------------------------------------------
+
+            System.out.println(">>> KONEKSI DATABASE BERHASIL! <<<");
 
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println(">>> KONEKSI DATABASE GAGAL! CEK LOG DI BAWAH <<<");
         }
     }
 
