@@ -1,17 +1,14 @@
-FROM tomcat:9.0-jdk17
+# Kita pakai Tomcat 9 (support javax) tapi dengan Java 21 (versi terbaru)
+FROM tomcat:9.0-jdk21
 
-# Hapus aplikasi default Tomcat agar bersih
+# Hapus aplikasi default
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# 1. Copy file JSP dan WEB-INF dari folder src/main/webapp ke folder utama server
+# Copy file JSP/HTML
 COPY src/main/webapp/ /usr/local/tomcat/webapps/ROOT/
 
-# 2. Copy file class Java (Servlets/Models) yang sudah dicompile
-# Agar logika Java (Login, Database) tetap berjalan
+# Copy hasil compile Java
 COPY build/classes/ /usr/local/tomcat/webapps/ROOT/WEB-INF/classes/
 
-# Buka port 8080
 EXPOSE 8080
-
-# Jalankan Tomcat
 CMD ["catalina.sh", "run"]
