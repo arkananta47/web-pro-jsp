@@ -13,11 +13,30 @@ public class MahasiswaDAO {
     public MahasiswaDAO() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            // KONEKSI KE DATABASE RAILWAY
+            // Kita ganti 'localhost' dengan 'mysql.railway.internal'
+            // Kita ganti nama database 'siakad' dengan 'railway' (sesuai screenshot)
             conn = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/siakad",
-                "root",
-                "030300"
+                "jdbc:mysql://mysql.railway.internal:3306/railway", 
+                "root", 
+                "1FliGvgmuazJpgdjiIGWZZSnGKmGhYTY"
             );
+            
+            // --- KODE TAMBAHAN: OTOMATIS BUAT TABEL ---
+            // Ini agar Anda tidak perlu repot setting SQL manual
+            String sqlCreate = "CREATE TABLE IF NOT EXISTS mahasiswa ("
+                    + "nim VARCHAR(20) PRIMARY KEY, "
+                    + "nama VARCHAR(100), "
+                    + "prodi VARCHAR(50), "
+                    + "semester INT, "
+                    + "email VARCHAR(100), "
+                    + "nohp VARCHAR(20)"
+                    + ")";
+            Statement stmt = conn.createStatement();
+            stmt.execute(sqlCreate);
+            // -------------------------------------------
+
         } catch (Exception e) {
             e.printStackTrace();
         }
